@@ -1,0 +1,44 @@
+name: Daily Email Digest
+
+on:
+  schedule:
+    - cron: '30 3 * * *'  # 9:00 AM IST
+  workflow_dispatch:
+
+jobs:
+  run-script:
+    runs-on: ubuntu-latest
+
+    # 👇 IMPORTANT: attach environment
+    environment: Default
+
+    steps:
+      - name: 📥 Checkout repo
+        uses: actions/checkout@v4
+
+      - name: 🐍 Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: 📦 Install dependencies
+        run: |
+          pip install groq python-dotenv
+
+      # 🔹 Install Composio
+      - name: Setup Composio
+        run: |
+          npm install -g composio
+          composio login --api-key ${{ vars.COMPOSIO_API_KEY }}
+
+      # 🔹 Set env file
+      - name: Set environment variables
+        run: |
+          echo "GROQ_API_KEY=${{ vars.GROQ_API_KEY }}" >> .env
+
+      # 🔹 Debug (optional but useful)
+      - name: Debug Composio
+        run: composio whoami
+
+      - name: 🚀 Run script
+        run: python mail.py
