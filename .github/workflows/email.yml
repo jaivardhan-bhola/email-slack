@@ -26,10 +26,11 @@ jobs:
           pip install groq python-dotenv
 
       # 🔹 Install Composio
-      - name: Setup Composio
-        run: |
-          npm install -g composio
-          composio login --api-key ${{ vars.COMPOSIO_API_KEY }}
+      - name: Install Composio
+        run: npm install -g composio
+
+      - name: Login Composio
+        run: composio login --api-key ${{ vars.COMPOSIO_API_KEY }}
 
       # 🔹 Set env file
       - name: Set environment variables
