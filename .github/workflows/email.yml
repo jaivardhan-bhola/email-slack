@@ -23,12 +23,10 @@ jobs:
       - name: Setup Composio
         run: |
           npm install -g composio
-          export PATH="$PATH:$(npm root -g)/.bin"
-          composio login --api-key ${{ vars.COMPOSIO_API_KEY }}
-          composio whoami
-
-      - name: Set env
-        run: echo "GROQ_API_KEY=${{ vars.GROQ_API_KEY }}" >> .env
+          npx composio login --api-key ${{ vars.COMPOSIO_API_KEY }}
+          npx composio whoami
+            - name: Set env
+              run: echo "GROQ_API_KEY=${{ vars.GROQ_API_KEY }}" >> .env
 
       - name: Run script
         run: python mail.py
